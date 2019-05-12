@@ -1,4 +1,4 @@
-// Refactored by Tanya Akulich, group 721703
+// Created by Tanya Akulich, group 721703
 // Functions compute, summBinaryNums and front created by Stepan Ryzhevich, group 621701
 
 class Conveyor {
@@ -120,6 +120,7 @@ class BinaryComputing {
     this.sum = "0000";
     this.retult = 0;
   }
+// Functions compute, summBinaryNums and front created by Stepan Ryzhevich, group 621701
 
   compute() {
     this.numberA = this.makeFourBit(this.numberA);
@@ -151,7 +152,7 @@ class BinaryComputing {
     document.getElementById((BinaryComputing.STEPS + 1 + this.pair) + '.' + 10).innerHTML += this.result + '<sub>10</sub>';
   }
 
-  // bunary multiply
+  // binary multiply
   multiply(number){
     var zero = BinaryComputing.ZERO;
     var fourBitted = number;
