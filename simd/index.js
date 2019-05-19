@@ -64,33 +64,33 @@ function setMatrix(xSize, ySize, table, matrix) {
   for (let rowNumber = 0; rowNumber < xSize; rowNumber++) {
     let row = table.insertRow(rowNumber);
 		matrix[rowNumber] = [];
-    for (let cellNumber = 0; cellNumber < ySize; cellNumber++) {
+    for (let columnNumber = 0; columnNumber < ySize; columnNumber++) {
       let cell = row.insertCell(-1);
-      matrix[rowNumber][cellNumber] = Math.round(getRandom(-1, 1) * 1000) / 1000;
-      cell.innerHTML = matrix[rowNumber][cellNumber];
+      matrix[rowNumber][columnNumber] = Math.round(getRandom(-1, 1) * 1000) / 1000;
+      cell.innerHTML = matrix[rowNumber][columnNumber];
     }
   }
 }
 
 function setCMatrix(xSize, ySize, mSize, table, matrix, AMatrix, BMatrix, EMatrix, GMatrix, tDivision, tSum, tDifference, tMultiplication, tComparison, tModule, tSquaring, numberOfProcessorElements) {
-  for (let rowNumber = 0; rowNumber < xSize; rowNumber++) {
+  for (let rowNumber = 0; rowNumber < ySize; rowNumber++) {
     let row = table.insertRow(rowNumber);
 		matrix[rowNumber] = [];
-    for (let cellNumber = 0; cellNumber < ySize; cellNumber++) {
+    for (let columnNumber = 0; columnNumber < xSize; columnNumber++) {
       let cell = row.insertCell(-1);
-      matrix[rowNumber][cellNumber] = Math.round(getC_Value(AMatrix, BMatrix, GMatrix, EMatrix, mSize, rowNumber, cellNumber, tDivision, tSum, tDifference, tMultiplication, tComparison, tModule, tSquaring, numberOfProcessorElements) * 1000) / 1000;
-      cell.innerHTML = matrix[rowNumber][cellNumber];
+      matrix[rowNumber][columnNumber] = Math.round(getValueForCMatrix(AMatrix, BMatrix, GMatrix, EMatrix, mSize, rowNumber, columnNumber, tDivision, tSum, tDifference, tMultiplication, tComparison, tModule, tSquaring, numberOfProcessorElements) * 1000) / 1000;
+      cell.innerHTML = matrix[rowNumber][columnNumber];
     }
   }
 }
 
-function setFMatrix(AMatrix, BMatrix, EMatrix, xSize, ySize, zSize, matrix) {
-  for (let yNumber = 0; yNumber < xSize; yNumber++) {
+function setFMatrix(AMatrix, BMatrix, EMatrix, zSize, matrix) {
+  for (let yNumber = 0; yNumber < AMatrix.length; yNumber++) {
 		matrix[yNumber] = [];
-    for (let xNumber = 0; xNumber < ySize; xNumber++) {
+    for (let xNumber = 0; xNumber < BMatrix[0].length; xNumber++) {
       matrix[yNumber][xNumber] = [];
       for (let zNumber = 0; zNumber < zSize; zNumber++) {
-        matrix[yNumber][xNumber][zNumber] = fValueCalculation(AMatrix, BMatrix, EMatrix, xSize, ySize, zSize);
+        matrix[yNumber][xNumber][zNumber] = fValueCalculation(AMatrix, BMatrix, EMatrix, yNumber, xNumber, zNumber);
       }
     }
   }
@@ -98,13 +98,12 @@ function setFMatrix(AMatrix, BMatrix, EMatrix, xSize, ySize, zSize, matrix) {
 }
 
 function setDMatrix(AMatrix, BMatrix, zSize, matrix) {
-  for (let yNumber = 0; yNumber < BMatrix[0].length; yNumber++) {
+  for (let yNumber = 0; yNumber < AMatrix.length; yNumber++) {
     matrix[yNumber] = [];
-    for (let xNumber = 0; xNumber < AMatrix.length; xNumber++) {
+    for (let xNumber = 0; xNumber < BMatrix[0].length; xNumber++) {
       matrix[yNumber][xNumber] = [];
       for (let zNumber = 0; zNumber < zSize; zNumber++) {
-        debugger;
-        matrix[yNumber][xNumber][zNumber] = AMatrix[xNumber][zNumber] * BMatrix[zNumber][yNumber];
+        matrix[yNumber][xNumber][zNumber] = AMatrix[yNumber][zNumber] * BMatrix[zNumber][xNumber];
       }
     }
   }
@@ -116,7 +115,7 @@ function getRandom(min, max){
 } //Автор http://javascript.ru/math.random
 
 function fValueCalculation(AMatrix, BMatrix, EMatrix, i, j, k) {
-  return (1 - AMatrix[i][k]) * (2 * EMatrix[k] - 1) * EMatrix[k] + (1 - BMatrix[k][j]) * (1 + 4 * (1 - AMatrix[i][k]) - 2 * EMatrix[k]) * (1 - EMatrix[k])
+  return (1 - AMatrix[i][k]) * (2 * EMatrix[0][k] - 1) * EMatrix[0][k] + (1 - BMatrix[k][j]) * (1 + 4 * (1 - AMatrix[i][k]) - 2 * EMatrix[0][k]) * (1 - EMatrix[0][k]);
 }
 
 function sequenceMultiplication(sequence, numberOfElements) {
@@ -137,21 +136,20 @@ function multiplicationOfDifferenceSequences(minuend, sequence, numberOfElements
   return result;
 }
 
-function getC_Value(AMatrix, BMatrix, GMatrix, EMatrix, mSize, j, i, tDivision, tSum, tDifference, tMultiplication, tComparison, tModule, tSquaring, numberOfProcessorElements){
+function getValueForCMatrix(AMatrix, BMatrix, GMatrix, EMatrix, mSize, j, i, tDivision, tSum, tDifference, tMultiplication, tComparison, tModule, tSquaring, numberOfProcessorElements){
 	var n_temp = numberOfProcessorElements;
   var value = 0;
-  let fMatrix = setFMatrix(AMatrix, BMatrix, EMatrix, i, j, mSize, []);
+  let fMatrix = setFMatrix(AMatrix, BMatrix, EMatrix, mSize, []);
   let dMatrix = setDMatrix(AMatrix, BMatrix, mSize, []);
-        debugger;
 
-  for (let k = 0; k < mSize; k++){
-    value += sequenceMultiplication(fMatrix[j][i], mSize) * (3 * GMatrix[i][j] - 2) * GMatrix[i][j] + (1 - multiplicationOfDifferenceSequences(1, dMatrix[i][j], mSize) + (4 * sequenceMultiplication(fMatrix[j][i], mSize) * multiplicationOfDifferenceSequences(1, dMatrix[i][j], mSize) - 3 * multiplicationOfDifferenceSequences(1, dMatrix[i][j], mSize)) * GMatrix[i][j]) * (1 - GMatrix[i][j])
+  for (let k = 0; k <= i; k++){
+    value += sequenceMultiplication(fMatrix[i][j], k) * (3 * GMatrix[i][j] - 2) * GMatrix[i][j] + (1 - multiplicationOfDifferenceSequences(1, dMatrix[i][j], k) + (4 * sequenceMultiplication(fMatrix[i][j], k) * multiplicationOfDifferenceSequences(1, dMatrix[i][j], k) - 3 * multiplicationOfDifferenceSequences(1, dMatrix[i][j], k)) * GMatrix[i][j]) * (1 - GMatrix[i][j])
   }
 
 
 	// for(var i = 0; i < mSize; i++){
-	// 	if(Math.pow(AMatrix[r][i], 2) > Math.abs(AMatrix[rowNumber][i] * BMatrix[i][cellNumber])){
-	// 		value += Math.pow(AMatrix[rowNumber][i], 2) - Math.abs(AMatrix[rowNumber][i] * BMatrix[i][cellNumber]);
+	// 	if(Math.pow(AMatrix[r][i], 2) > Math.abs(AMatrix[rowNumber][i] * BMatrix[i][columnNumber])){
+	// 		value += Math.pow(AMatrix[rowNumber][i], 2) - Math.abs(AMatrix[rowNumber][i] * BMatrix[i][columnNumber]);
 	// 		time_w_parallel += tSquaring*2 + tComparison + tModule*2 + tMultiplication*2 + tSum + tDifference;
 	// 		if(n_temp != numberOfProcessorElements && numberOfProcessorElements!= 1) {
 	// 			time += tSquaring + tComparison + tModule + tMultiplication + tSum;
@@ -171,7 +169,7 @@ function getC_Value(AMatrix, BMatrix, GMatrix, EMatrix, mSize, j, i, tDivision, 
 	// 		continue;
 	// 	}
 	// 	else {
-	// 		if(BMatrix[i][cellNumber] == 0 && i != 0){
+	// 		if(BMatrix[i][columnNumber] == 0 && i != 0){
 	// 			value += AMatrix[rowNumber][i];
 	// 			time_w_parallel += tComparison + tSum;
 	// 			if(n_temp != numberOfProcessorElements && numberOfProcessorElements!= 1) {
@@ -187,7 +185,7 @@ function getC_Value(AMatrix, BMatrix, GMatrix, EMatrix, mSize, j, i, tDivision, 
 	// 			continue;
 	// 		}
 	// 		else {
-	// 			value += Math.pow(AMatrix[rowNumber][i], 2) / Math.abs(BMatrix[i][cellNumber]);
+	// 			value += Math.pow(AMatrix[rowNumber][i], 2) / Math.abs(BMatrix[i][columnNumber]);
 	// 			time_w_parallel += tSquaring + tModule + tSum;
 	// 			if(n_temp != numberOfProcessorElements && numberOfProcessorElements != 1) {
 	// 				time += tSum;
