@@ -9,31 +9,31 @@
 <body>
   <table width="100%" cellpadding="2">
     <tr>
-      <td align="right" width="100">Sum</td>
+      <td align="right" width="100">Sum time</td>
       <td><input type="text" id="sum" size="20"></td>
     </tr>
     <tr>
-      <td align="right" width="100">Difference</td>
+      <td align="right" width="100">Difference time</td>
       <td><input type="text" id="difference" size="20"></td>
     </tr>
     <tr>
-      <td align="right" width="100">Multiplication</td>
+      <td align="right" width="100">Multiplication time</td>
       <td><input type="text" id="multiplication" size="20"></td>
     </tr>
     <tr>
-      <td align="right" width="100">Division</td>
+      <td align="right" width="100">Division time</td>
       <td><input type="text" id="division" size="20"></td>
     </tr>
     <tr>
-      <td align="right" width="100">Comparison</td>
+      <td align="right" width="100">Comparison time</td>
       <td><input type="text" id="comparison" size="20"></td>
     </tr>
     <tr>
-      <td align="right" width="100">Module</td>
+      <td align="right" width="100">Module time</td>
       <td><input type="text" id="module" size="20"></td>
     </tr>
     <tr>
-      <td align="right" width="100">Squaring</td>
+      <td align="right" width="100">Squaring time</td>
       <td><input type="text" id="squaring" size="20"></td>
     </tr>
   </table>
@@ -56,19 +56,23 @@
   <br>
 
   Number of processor elements
-	<input id="processorElement"/> <br><br>
+	<input id="processorElements"/> <br><br>
 
-	<button id="button" onclick='drawTable();'>Create a matrix of values C </button>
+  <button id="button" onclick='drawTable();'>Create a matrix of values C </button>
 
   <div id="m"></div><br>
   <div id="p"></div><br>
   <div id="q"></div><br>
 
   <br>
-  The matrix A (pxm)<br>
+  The matrix A (p x m)<br>
   <table id="aMatrix" border=1></table><br>
-  The matrix B (mxq)<br>
+  The matrix B (m x q)<br>
   <table id="bMatrix" border=1></table><br>
+  The matrix E (1 x m)<br>
+  <table id="eMatrix" border=1></table><br>
+  The matrix G (p x q)<br>
+  <table id="gMatrix" border=1></table><br>
   The matrix C (pxq)<br>
   <table id="cMatrix" border=1></table><br>
 
