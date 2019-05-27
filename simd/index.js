@@ -114,8 +114,14 @@ function getRandom(min, max){
   return Math.random() * (max - min) + min;
 } //Автор http://javascript.ru/math.random
 
+function deltaCalculation(a, b) {
+  return b/(1 - a);
+}
+
 function fValueCalculation(AMatrix, BMatrix, EMatrix, i, j, k) {
-  return (1 - AMatrix[i][k]) * (2 * EMatrix[0][k] - 1) * EMatrix[0][k] + (1 - BMatrix[k][j]) * (1 + 4 * (1 - AMatrix[i][k]) - 2 * EMatrix[0][k]) * (1 - EMatrix[0][k]);
+  let ABDelta = deltaCalculation(AMatrix[i][k], BMatrix[k][j]);
+  let BADelta = deltaCalculation(BMatrix[k][j], AMatrix[i][k]);
+  return ABDelta * (2 * EMatrix[0][k] - 1) * EMatrix[0][k] + BADelta * (1 + 4 * ABDelta - 2 * EMatrix[0][k]) * (1 - EMatrix[0][k]);
 }
 
 function sequenceMultiplication(sequence, numberOfElements) {
