@@ -1,4 +1,4 @@
-// created by Tanya Akulich 721702
+// created by Tanya Akulich 721703
 
 var time = 0;
 var time_w_parallel = 0;
@@ -14,6 +14,10 @@ let tSum;
 let tDifference;
 let tMultiplication;
 let numberOfProcessorElements;
+
+let rang = 0;
+let Lavg = 0;
+
 
 function drawTable(){
 	var tableA = document.getElementById('aMatrix');
@@ -61,11 +65,23 @@ function drawTable(){
 
   setCMatrix(pSize, qSize, mSize, tableC, CMatrix, AMatrix, BMatrix, EMatrix, GMatrix);
 
-	document.getElementById('time').innerHTML = "time = " + Math.ceil(timeInParallelCalculation);
+  rang = mSize * (pSize + qSize + 1) + pSize * qSize;
+  Lavg = Math.ceil(timeInSequentialCalculation / rang);
 
-	document.getElementById('Ky').innerHTML = "Ky = " + timeInSequentialCalculation/timeInParallelCalculation;
-	document.getElementById('e').innerHTML = "e = " + timeInSequentialCalculation/(timeInParallelCalculation * numberOfProcessorElements);
-	document.getElementById('D').innerHTML = "D = " + time * mSize * pSize * qSize/L_aug;
+	document.getElementById('time').innerHTML = "time = " + timeInParallelCalculation;
+	// document.getElementById('t1').innerHTML = "time 1 = " + timeInSequentialCalculation;
+
+	document.getElementById('Ky').innerHTML = "Ky = " + timeInSequentialCalculation/ timeInParallelCalculation;
+	document.getElementById('e').innerHTML = "e = " + timeInSequentialCalculation/ (timeInParallelCalculation * numberOfProcessorElements);
+	document.getElementById('D').innerHTML = "D = " + timeInSequentialCalculation / Lavg;
+	// document.getElementById('r').innerHTML = "r = " + rang;
+
+  rang = 0;
+  Lavg = 0;
+  timeInParallelCalculation = 0;
+  timeInSequentialCalculation = 0;
+  operationTime = 0;
+  numberOfUsedProcessorElements = 0;
 }
 
 function setMatrix(xSize, ySize, table, matrix) {
@@ -97,6 +113,26 @@ function setFMatrix(AMatrix, BMatrix, EMatrix, zSize, matrix) {
 		matrix[yNumber] = [];
     for (let xNumber = 0; xNumber < BMatrix[0].length; xNumber++) {
       matrix[yNumber][xNumber] = [];
+      for (let zNumber = 0; zNumber < zSize; zNumber++) {
+        setCalculationTime('division');
+        setCalculationTime('division');
+      }
+      forsTimeIncrease();
+      for (let zNumber = 0; zNumber < zSize; zNumber++) {
+        setCalculationTime('multiplication');
+        setCalculationTime('multiplication');
+        setCalculationTime('multiplication');
+        setCalculationTime('multiplication');
+      }
+      forsTimeIncrease();
+      for (let zNumber = 0; zNumber < zSize; zNumber++) {
+        setCalculationTime('difference');
+      }
+      forsTimeIncrease();
+      for (let zNumber = 0; zNumber < zSize; zNumber++) {
+        setCalculationTime('sum');
+      }
+      forsTimeIncrease();
       for (let zNumber = 0; zNumber < zSize; zNumber++) {
         matrix[yNumber][xNumber][zNumber] = fValueCalculation(AMatrix, BMatrix, EMatrix, yNumber, xNumber, zNumber);
       }
@@ -130,29 +166,36 @@ function controlNumberOfUsedProcessorElements(){
   }
 }
 
+function forsTimeIncrease(){
+  timeInParallelCalculation += operationTime;
+  numberOfUsedProcessorElements = 0;
+  operationTime = 0;
+}
+
 function setCalculationTime(operation){
   switch(operation){
     case 'division':
       timeInSequentialCalculation += tDivision;
-      operationTime = numberOfUsedProcessorElements ? operationTime += tDivision : tDivision;
+      operationTime = operationTime < tDivision ? tDivision : operationTime;
       numberOfUsedProcessorElements += 1;
       controlNumberOfUsedProcessorElements();
       break;
     case 'multiplication':
       timeInSequentialCalculation += tMultiplication;
-      operationTime = numberOfUsedProcessorElements ? operationTime += tMultiplication : tMultiplication;
+      operationTime = operationTime < tMultiplication ? tMultiplication : operationTime;
+
       numberOfUsedProcessorElements += 1;
       controlNumberOfUsedProcessorElements();
       break;
     case 'difference':
       timeInSequentialCalculation += tDifference;
-      operationTime = numberOfUsedProcessorElements ? operationTime += tDifference : tDifference;
+      operationTime = operationTime < tDifference ? tDifference : operationTime;
       numberOfUsedProcessorElements += 1;
       controlNumberOfUsedProcessorElements();
       break;
     case 'sum':
       timeInSequentialCalculation += tSum;
-      operationTime = numberOfUsedProcessorElements ? operationTime += tSum : tSum;
+      operationTime = operationTime < tSum ? tSum : operationTime;
       numberOfUsedProcessorElements += 1;
       controlNumberOfUsedProcessorElements();
       break;
@@ -160,20 +203,12 @@ function setCalculationTime(operation){
 }
 
 function deltaCalculation(a, b) {
-  setCalculationTime('division');
-  return b/(1 - a);
+  return b / (1 - a);
 }
 
 function fValueCalculation(AMatrix, BMatrix, EMatrix, i, j, k) {
   let ABDelta = deltaCalculation(AMatrix[i][k], BMatrix[k][j]);
   let BADelta = deltaCalculation(BMatrix[k][j], AMatrix[i][k]);
-
-  setCalculationTime('multiplication');
-  setCalculationTime('multiplication');
-  setCalculationTime('difference');
-  setCalculationTime('multiplication');
-  setCalculationTime('multiplication');
-  setCalculationTime('sum');
 
   return ABDelta * (2 * EMatrix[0][k] - 1) * EMatrix[0][k] + BADelta * (1 + 4 * ABDelta - 2 * EMatrix[0][k]) * (1 - EMatrix[0][k]);
 }
@@ -208,5 +243,6 @@ function getValueForCMatrix(AMatrix, BMatrix, GMatrix, EMatrix, mSize, j, i){
   for (let k = 0; k <= i; k++){
     value += sequenceMultiplication(fMatrix[i][j], k) * (3 * GMatrix[i][j] - 2) * GMatrix[i][j] + (1 - multiplicationOfDifferenceSequences(1, dMatrix[i][j], k) + (4 * sequenceMultiplication(fMatrix[i][j], k) * multiplicationOfDifferenceSequences(1, dMatrix[i][j], k) - 3 * multiplicationOfDifferenceSequences(1, dMatrix[i][j], k)) * GMatrix[i][j]) * (1 - GMatrix[i][j])
   }
+  numberOfUsedProcessorElements = 0;
 	return value;
 }
