@@ -1,0 +1,78 @@
+<!DOCTYPE HTML>
+<html>
+
+<head>
+	<title> SIMD </title>
+	<script src="index.js"></script>
+</head>
+
+<body>
+  <table width="100%" cellpadding="2">
+    <tr>
+      <td align="right" width="100">Sum time</td>
+      <td><input type="text" id="sum" size="20"></td>
+    </tr>
+    <tr>
+      <td align="right" width="100">Difference time</td>
+      <td><input type="text" id="difference" size="20"></td>
+    </tr>
+    <tr>
+      <td align="right" width="100">Multiplication time</td>
+      <td><input type="text" id="multiplication" size="20"></td>
+    </tr>
+    <tr>
+      <td align="right" width="100">Division time</td>
+      <td><input type="text" id="division" size="20"></td>
+    </tr>
+  </table>
+  <br>
+
+  <table width="100%" cellpadding="2">
+    <tr>
+      <td align="right" width="100">m</td>
+      <td><input type="text" id="mInput" size="20"></td>
+    </tr>
+    <tr>
+      <td align="right" width="100">p</td>
+      <td><input type="text" id="pInput" size="20"></td>
+    </tr>
+    <tr>
+      <td align="right" width="100">q</td>
+      <td><input type="text" id="qInput" size="20"></td>
+    </tr>
+  </table>
+  <br>
+
+  Number of processor elements
+	<input id="processorElements"/> <br><br>
+
+  <button id="button" onclick='drawTable();'>Create a matrix of values C </button>
+
+  <div id="m"></div><br>
+  <div id="p"></div><br>
+  <div id="q"></div><br>
+
+  <br>
+  The matrix A (p x m)<br>
+  <table id="aMatrix" border=1></table><br>
+  The matrix B (m x q)<br>
+  <table id="bMatrix" border=1></table><br>
+  The matrix E (1 x m)<br>
+  <table id="eMatrix" border=1></table><br>
+  The matrix G (p x q)<br>
+  <table id="gMatrix" border=1></table><br>
+  The matrix C (p x q)<br>
+  <table id="cMatrix" border=1></table><br>
+
+  <div id ="time"></div><br>
+  <div id ="t1"></div><br>
+
+  <div id ="Ky"></div><br>
+  <div id ="e"></div><br>
+  <div id ="D"></div><br>
+  <div id ="r"></div>
+
+</body>
+
+
+</html>
