@@ -1,9 +1,5 @@
 // created by Tanya Akulich 721703
 
-var time = 0;
-var time_w_parallel = 0;
-var L_aug = 0;
-
 let timeInParallelCalculation = 0;
 let timeInSequentialCalculation = 0;
 let operationTime = 0;
@@ -69,12 +65,12 @@ function drawTable(){
   Lavg = Math.ceil(timeInSequentialCalculation / rang);
 
 	document.getElementById('time').innerHTML = "time = " + timeInParallelCalculation;
-	// document.getElementById('t1').innerHTML = "time 1 = " + timeInSequentialCalculation;
+	document.getElementById('t1').innerHTML = "time 1 = " + timeInSequentialCalculation;
 
 	document.getElementById('Ky').innerHTML = "Ky = " + timeInSequentialCalculation/ timeInParallelCalculation;
 	document.getElementById('e').innerHTML = "e = " + timeInSequentialCalculation/ (timeInParallelCalculation * numberOfProcessorElements);
-	document.getElementById('D').innerHTML = "D = " + timeInSequentialCalculation / Lavg;
-	// document.getElementById('r').innerHTML = "r = " + rang;
+	document.getElementById('D').innerHTML = "D = " + timeInParallelCalculation / Lavg;
+	document.getElementById('r').innerHTML = "r = " + rang;
 
   rang = 0;
   Lavg = 0;
@@ -176,26 +172,26 @@ function setCalculationTime(operation){
   switch(operation){
     case 'division':
       timeInSequentialCalculation += tDivision;
-      operationTime = operationTime < tDivision ? tDivision : operationTime;
+      // operationTime = operationTime < tDivision ? tDivision : operationTime;
       numberOfUsedProcessorElements += 1;
       controlNumberOfUsedProcessorElements();
       break;
     case 'multiplication':
       timeInSequentialCalculation += tMultiplication;
-      operationTime = operationTime < tMultiplication ? tMultiplication : operationTime;
+      // operationTime = operationTime < tMultiplication ? tMultiplication : operationTime;
 
       numberOfUsedProcessorElements += 1;
       controlNumberOfUsedProcessorElements();
       break;
     case 'difference':
       timeInSequentialCalculation += tDifference;
-      operationTime = operationTime < tDifference ? tDifference : operationTime;
+      // operationTime = operationTime < tDifference ? tDifference : operationTime;
       numberOfUsedProcessorElements += 1;
       controlNumberOfUsedProcessorElements();
       break;
     case 'sum':
       timeInSequentialCalculation += tSum;
-      operationTime = operationTime < tSum ? tSum : operationTime;
+      // operationTime = operationTime < tSum ? tSum : operationTime;
       numberOfUsedProcessorElements += 1;
       controlNumberOfUsedProcessorElements();
       break;
